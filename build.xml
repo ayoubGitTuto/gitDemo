@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+
+<project name="ant-training" default="info">
+
+  <target name="clean">
+    <delete verbose="true" dir="lib"></delete>
+    <delete verbose="true" dir="target"></delete>
+    <delete verbose="true" dir="bin"></delete>
+    <delete verbose="true" dir="report"></delete>
+  </target>
+
+  <target name="create" depends="clean">
+    <mkdir dir="lib"></mkdir>
+    <mkdir dir="target"></mkdir>
+    <mkdir dir="bin"></mkdir>
+    <mkdir dir="report"></mkdir>
+  </target>
+
+  <target name="copyLib" depends="create">
+    <copy todir="lib" overwrite="true">
+      <fileset dir="C:\Users\alaouadi\Downloads\commons-collections4-4.3" includes="*.jar"></fileset>
+    </copy>
+
+  </target>
+
+  <path id="classpath">
+
+    <path location="lib">
+      <fileset dir="lib" includes="*.jar"></fileset>
+
+    </path>
+    <path location="target"></path>
+  </path>
+
+
+  <target name="compile" depends="copyLib">
+    <javac classpathref="classpath" srcdir="src" destdir="target" fork="true" includeantruntime="true"></javac>
+    <javac classpathref="classpath" srcdir="test" destdir="target" fork="true" includeantruntime="true"></javac>
+  </target>
+
+  <target name="test" depends="compile">
+    <junit haltonfailure="false" printsummary="true">
+      <classpath refid="classpath"></classpath>
+      <test name="com.ant.training.HelloWorldTest.myContains" todir="report"></test>
+      <formatter type="plain"></formatter>
+    </junit>
+  </target>
+
+
+  <target name="run" depends="test">
+    <java classpathref="classpath" fork="true" dir="target" classname="com.ant.training.HelloWorld"></java>
+  </target>
+
+  <target name="info">
+    <echo>Default Target</echo>
+  </target>
+</project>
